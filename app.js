@@ -18,7 +18,7 @@ var rooms = ['room1', 'room2', 'room3'];
 
 io.sockets.on('connection', function (socket) {
 	// when the client emits 'adduser', this listens and executes
-	socket.on('adduser', function(username){
+	socket.on('adduser', function(username) {
 		// store the username in the socket session for this client
 		socket.username = username;
 		// store the room name in the socket session for this client
@@ -34,11 +34,11 @@ io.sockets.on('connection', function (socket) {
 		socket.emit('updaterooms', rooms, 'room1');
 	});
 	// when the client emits 'sendchat', this listens and executes
-	socket.on('sendchat', function (data) {
+	socket.on('sendchat', function(data) {
 		// we tell the client to execute 'updatechat' with 2 parameters
 		io.sockets.in(socket.room).emit('updatechat', socket.username, data);
 	});
-	socket.on('switchRoom', function(newroom){
+	socket.on('switchRoom', function(newroom) {
 		socket.leave(socket.room);
 		socket.join(newroom);
 		socket.emit('updatechat', 'SERVER', 'you have connected to '+ newroom);
@@ -48,6 +48,9 @@ io.sockets.on('connection', function (socket) {
 		socket.room = newroom;
 		socket.broadcast.to(newroom).emit('updatechat', 'SERVER', socket.username+' has joined this room');
 		socket.emit('updaterooms', rooms, newroom);
+	});
+	socket.on('add_room', function(room_name) {
+		rooms.push(room_name);
 	});
 	// when the user disconnects.. perform this
 	socket.on('disconnect', function(){

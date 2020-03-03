@@ -39,4 +39,9 @@ $(function(){
 			$('#datasend').focus().click();
 		}
 	});
+	$('#create_room').click(function() {
+		var room_name = prompt('Room name?')
+		socket.emit('add_room', room_name);
+		switchRoom(room_name);
+	});
 });
