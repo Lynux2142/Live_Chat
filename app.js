@@ -9,8 +9,12 @@ app.get('/', function(req, res) {
 });
 
 io.on('connection', function(socket) {
-	socket.on('chat message', function(msg) {
-		io.emit('chat message', msg);
+	socket.username = 'Anonymous';
+	socket.on('chat_message', function(msg) {
+		io.emit('chat_message', { message: msg, username: socket.username });
+	});
+	socket.on('change_username', function(username) {
+		socket.username = username;
 	});
 });
 
