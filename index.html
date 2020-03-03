@@ -1,52 +1,62 @@
-<!DOCTYPE html>
-<html>
-	<head>
-		<title>Socket.IO chat</title>
-		<style>
-			* { margin: 0; padding: 0; box-sizing: border-box; }
-			body { font: 13px Helvetica, Arial; }
-			form { background: #888; padding: 5px; position: fixed; bottom: 0; width: 100%; }
-			form input { border: 0; padding: 10px; width: 90%; margin-right: .5%; }
-			form button { width: 9%; background: rgb(130, 224, 255); border: none; padding: 10px; }
-			#messages { list-style-type: none; margin: 0; padding: 0; }
-			#messages li { padding: 5px 10px; }
-			#messages li:nth-child(odd) { background: #eee; }
-			#messages { margin-bottom: 40px }
-		</style>
-	</head>
-	<body>
-		<section>
-			<input id="username" autocomplete="off" value="Anonymous" />
-			<button id="update_username">Change Username</button>
-		</section>
-		<ul id="messages"></ul>
-		<form action="">
-			<input id="m" autocomplete="off" /><button>Send</button>
-		</form>
-		<script src="/socket.io/socket.io.js"></script>
-		<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-		<script>
-			$(function () {
-				var socket = io();
-				var message_box = $('#m');
-				var messages = $('#messages');
-				var username = $('#username');
-				var update_username = $('#update_username');
+<script src="/socket.io/socket.io.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
+<script>
+	var socket = io.connect('http://localhost:8080');
 
-				$('form').submit(function(e) {
-					e.preventDefault();
-					socket.emit('chat_message', message_box.val());
-					message_box.val('');
-					return false;
-				});
-				socket.on('chat_message', function(data) {
-					messages.append($('<li>').text(data.username + ': ' + data.message));
-					window.scrollTo(0, document.body.scrollHeight);
-				});
-				update_username.click(function() {
-					socket.emit('change_username', username.val());
-				});
-			});
-		</script>
-	</body>
-</html>
+	// on connection to server, ask for user's name with an anonymous callback
+	socket.on('connect', function(){
+		// call the server-side function 'adduser' and send one parameter (value of prompt)
+		socket.emit('adduser', prompt("What's your name?"));
+	});
+
+	// listener, whenever the server emits 'updatechat', this updates the chat body
+	socket.on('updatechat', function (username, data) {
+		$('#conversation').append('<b>'+username + ':</b> ' + data + '<br>');
+	});
+
+	// listener, whenever the server emits 'updaterooms', this updates the room the client is in
+	socket.on('updaterooms', function(rooms, current_room) {
+		$('#rooms').empty();
+		$.each(rooms, function(key, value) {
+			if(value == current_room){
+				$('#rooms').append('<div>' + value + '</div>');
+			}
+			else {
+				$('#rooms').append('<div><a href="#" onclick="switchRoom(\''+value+'\')">' + value + '</a></div>');
+			}
+		});
+	});
+
+	function switchRoom(room){
+		socket.emit('switchRoom', room);
+	}
+	
+	// on load of page
+	$(function(){
+		// when the client clicks SEND
+		$('#datasend').click( function() {
+			var message = $('#data').val();
+			$('#data').val('');
+			// tell server to execute 'sendchat' and send along one parameter
+			socket.emit('sendchat', message);
+		});
+
+		// when the client hits ENTER on their keyboard
+		$('#data').keypress(function(e) {
+			if(e.which == 13) {
+				$(this).blur();
+				$('#datasend').focus().click();
+			}
+		});
+	});
+
+</script>
+<div style="float:left;width:100px;border-right:1px solid black;height:300px;padding:10px;overflow:scroll-y;">
+	<b>ROOMS</b>
+	<div id="rooms"></div>
+</div>
+<div style="float:left;width:300px;height:250px;overflow:scroll-y;padding:10px;">
+	<div id="conversation"></div>
+	<input id="data" style="width:200px;" />
+	<input type="button" id="datasend" value="send" />
+</div>
