@@ -1,11 +1,11 @@
 var express = require('express')
-	, app = express()
-	, http = require('http')
-	, server = http.createServer(app)
-	, io = require('socket.io').listen(server);
+var app = express();
+var server = require('http').createServer(app);
+var io = require('socket.io').listen(server);
+var ip = require('ip').address();
+var port = 4242
 
-server.listen(8080);
-
+app.use(express.static('public'));
 // routing
 app.get('/', function (req, res) {
 	res.sendFile(__dirname + '/index.html');
@@ -13,12 +13,10 @@ app.get('/', function (req, res) {
 
 // usernames which are currently connected to the chat
 var usernames = {};
-
 // rooms which are currently available in chat
-var rooms = ['room1','room2','room3'];
+var rooms = ['room1', 'room2', 'room3'];
 
 io.sockets.on('connection', function (socket) {
-
 	// when the client emits 'adduser', this listens and executes
 	socket.on('adduser', function(username){
 		// store the username in the socket session for this client
@@ -35,13 +33,11 @@ io.sockets.on('connection', function (socket) {
 		socket.broadcast.to('room1').emit('updatechat', 'SERVER', username + ' has connected to this room');
 		socket.emit('updaterooms', rooms, 'room1');
 	});
-
 	// when the client emits 'sendchat', this listens and executes
 	socket.on('sendchat', function (data) {
 		// we tell the client to execute 'updatechat' with 2 parameters
 		io.sockets.in(socket.room).emit('updatechat', socket.username, data);
 	});
-
 	socket.on('switchRoom', function(newroom){
 		socket.leave(socket.room);
 		socket.join(newroom);
@@ -53,8 +49,6 @@ io.sockets.on('connection', function (socket) {
 		socket.broadcast.to(newroom).emit('updatechat', 'SERVER', socket.username+' has joined this room');
 		socket.emit('updaterooms', rooms, newroom);
 	});
-
-
 	// when the user disconnects.. perform this
 	socket.on('disconnect', function(){
 		// remove the username from global usernames list
@@ -65,4 +59,7 @@ io.sockets.on('connection', function (socket) {
 		socket.broadcast.emit('updatechat', 'SERVER', socket.username + ' has disconnected');
 		socket.leave(socket.room);
 	});
+});
+server.listen(port, ip, function() {
+	console.log(ip + ' - listening on *:' + port);
 });
