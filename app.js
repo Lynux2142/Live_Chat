@@ -87,5 +87,5 @@ function leave_message(socket) {
 }
 
 server.listen(port, ip, function() {
-	console.log('listening on *:' + port);
+	console.log(ip + ' - listening on *:' + port);
 });
