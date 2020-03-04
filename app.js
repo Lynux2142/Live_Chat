@@ -17,6 +17,10 @@ var users = {};
 io.sockets.on('connection', function(socket) {
 	var address = socket.request.connection.remoteAddress;
 	console.log('New connection from ' + address);
+
+	socket.on('print_users', function() {
+		console.log(users);
+	});
 	socket.on('add_user', function(username) {
 		var tmp_username = username;
 		for (let i = 1; users[tmp_username]; i++) {
@@ -52,12 +56,15 @@ io.sockets.on('connection', function(socket) {
 	});
 
 	socket.on('disconnect', function() {
-		delete users[socket.username];
-		socket.broadcast.emit('chat_message', {
-			username: 'SERVER',
-			message: socket.username + ' has disconnect'
-		});
-		socket.leave(socket.room);
+		if (users[socket.username]) {
+			delete users[socket.username];
+			socket.broadcast.emit('chat_message', {
+				username: 'SERVER',
+				message: socket.username + ' has disconnect'
+			});
+			socket.leave(socket.room);
+		}
+		console.log('error disconnect');
 	});
 });
 

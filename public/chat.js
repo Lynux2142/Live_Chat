@@ -32,6 +32,9 @@ $(function () {
 	var create_room = $('#create_room');
 	var update_rooms = $('#update_rooms');
 
+	$('#print_users').click(function() {
+		socket.emit('print_users');
+	});
 	$('form').submit(function(e) {
 		e.preventDefault();
 		socket.emit('chat_message', message_box.val());
