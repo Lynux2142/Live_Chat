@@ -12,13 +12,18 @@ app.get('/', function(req, res) {
 });
 
 var rooms = ['room1', 'room2', 'room3'];
+var users = {};
 
 io.sockets.on('connection', function(socket) {
 	var address = socket.request.connection.remoteAddress;
 	console.log('New connection from ' + address);
-	socket.username = "Anonymous";
 	socket.on('add_user', function(username) {
-		socket.username = username ? username : "Anonymous";
+		var tmp_username = username;
+		for (let i = 1; users[tmp_username]; i++) {
+			tmp_username = username + '(' + i + ')';
+		}
+		socket.username = tmp_username ? tmp_username : "Anonymous";
+		users[socket.username] = socket.username;
 		socket.emit('update_rooms', rooms, socket.room);
 	});
 
@@ -47,6 +52,7 @@ io.sockets.on('connection', function(socket) {
 	});
 
 	socket.on('disconnect', function() {
+		delete users[socket.username];
 		socket.broadcast.emit('chat_message', {
 			username: 'SERVER',
 			message: socket.username + ' has disconnect'

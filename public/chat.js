@@ -6,7 +6,9 @@ socket.on('connect', function() {
 });
 
 socket.on('chat_message', function(data) {
-	messages.append('<li><b>' + data.username + ':</b> ' + data.message + '</li>');
+	if (data.message) {
+		messages.append('<li><b>' + data.username + ':</b> ' + data.message + '</li>');
+	}
 	window.scrollTo(0, document.body.scrollHeight);
 });
 

@@ -4,12 +4,19 @@
 	box-sizing: border-box;
 }
 
+#title {
+	border-bottom: 1px solid black;
+	background: #AAA;
+	padding: 9px;
+	text-align: center;
+}
+
 body {
 	font: 20px Helvetica, Arial;
 }
 
 #room_list {
-	background: #AAA;
+	background: #DDD;
 	float: left;
 	width: 100px;
 	border-right: 1px solid black;
@@ -20,6 +27,7 @@ body {
 }
 
 form {
+	display: inline-block;
 	background: #888;
 	padding: 5px;
 	position: fixed;
@@ -30,18 +38,18 @@ form {
 form input {
 	border: 0;
 	padding: 10px;
-	width: 90%;
+	width: calc(100% - 60px);
 	margin-right: .5%;
 }
 
 form button {
-	width: 9%;
+	width: 50px;
 	background: rgb(130, 224, 255);
 	border: none;
 	padding: 10px;
 }
 
-#messages {
+#message_list {
 	list-style-type: none;
 	margin: 0;
 	padding: 0;
