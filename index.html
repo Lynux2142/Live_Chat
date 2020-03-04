@@ -2,51 +2,21 @@
 <html>
 	<head>
 		<title>Socket.IO chat</title>
-		<style>
-			* { margin: 0; padding: 0; box-sizing: border-box; }
-			body { font: 13px Helvetica, Arial; }
-			form { background: #888; padding: 5px; position: fixed; bottom: 0; width: 100%; }
-			form input { border: 0; padding: 10px; width: 90%; margin-right: .5%; }
-			form button { width: 9%; background: rgb(130, 224, 255); border: none; padding: 10px; }
-			#messages { list-style-type: none; margin: 0; padding: 0; }
-			#messages li { padding: 5px 10px; }
-			#messages li:nth-child(odd) { background: #eee; }
-			#messages { margin-bottom: 40px }
-		</style>
+		<link rel="stylesheet" type="text/css" href="style.css">
 	</head>
 	<body>
-		<section>
-			<input id="username" autocomplete="off" value="Anonymous" />
-			<button id="update_username">Change Username</button>
-		</section>
+		<div id="room_list">
+			<b>ROOMS</b>
+			<div id="rooms"></div>
+			<button id="create_room">create room</button>
+			<button id="update_rooms">update</button>
+		</div>
 		<ul id="messages"></ul>
 		<form action="">
 			<input id="m" autocomplete="off" /><button>Send</button>
 		</form>
 		<script src="/socket.io/socket.io.js"></script>
 		<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-		<script>
-			$(function () {
-				var socket = io();
-				var message_box = $('#m');
-				var messages = $('#messages');
-				var username = $('#username');
-				var update_username = $('#update_username');
-
-				$('form').submit(function(e) {
-					e.preventDefault();
-					socket.emit('chat_message', message_box.val());
-					message_box.val('');
-					return false;
-				});
-				socket.on('chat_message', function(data) {
-					messages.append($('<li>').text(data.username + ': ' + data.message));
-					window.scrollTo(0, document.body.scrollHeight);
-				});
-				update_username.click(function() {
-					socket.emit('change_username', username.val());
-				});
-			});
-		</script>
+		<script src="chat.js"></script>
 	</body>
 </html>
