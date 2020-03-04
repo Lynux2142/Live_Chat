@@ -7,7 +7,7 @@ socket.on('connect', function() {
 
 socket.on('chat_message', function(data) {
 	if (data.message) {
-		messages.append('<li><b>' + data.username + ':</b> ' + data.message + '</li>');
+		messages.append('<p><b>' + data.username + ':</b> ' + data.message + '</p>');
 	}
 	window.scrollTo(0, document.body.scrollHeight);
 });
