@@ -1,5 +1,5 @@
 var app = require('express')();
-var http = require('http').Server(app);
+var server = require('http').Server(app);
 var io = require('socket.io')(http);
 var port = process.env.PORT || 4242;
 var ip = require('ip');
@@ -18,6 +18,6 @@ io.on('connection', function(socket) {
 	});
 });
 
-http.listen(port, ip.address(), function() {
+server.listen(port, ip.address(), function() {
 	console.log('listening on *:' + port);
 });
