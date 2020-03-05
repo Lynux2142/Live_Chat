@@ -61,6 +61,9 @@ io.sockets.on('connection', function(socket) {
 
 	socket.on('disconnect', function() {
 		if (users[socket.username]) {
+			if (rooms[socket.room]) {
+				delete rooms[socket.room][socket.username];
+			}
 			delete users[socket.username];
 			socket.broadcast.emit('chat_message', {
 				username: 'SERVER',
