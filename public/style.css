@@ -4,11 +4,17 @@
 	box-sizing: border-box;
 }
 
-#title {
+header {
 	border-bottom: 1px solid black;
 	background: #AAA;
-	padding: 9px;
+	height: 3.25rem;
 	text-align: center;
+	position: fixed;
+	width: 100%;
+	top: 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 
 body {
@@ -24,6 +30,7 @@ body {
 	padding: 10px;
 	overflow: scroll-y;
 	position: fixed;
+	top: 3.25rem;
 }
 
 form {
@@ -54,6 +61,7 @@ form button {
 	margin: 0;
 	padding: 0;
 	margin-left: 100px;
+	margin-top: 3.25rem;
 }
 
 #messages p {
@@ -61,7 +69,7 @@ form button {
 }
 
 #messages p:nth-child(odd) {
-	background: #eee;
+	background: #E8F8FF;
 }
 
 #messages {
