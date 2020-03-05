@@ -11,7 +11,7 @@ app.get('/', function(req, res) {
 	res.sendFile(__dirname + '/index.html');
 });
 
-var rooms = ['room1', 'room2', 'room3'];
+var rooms = { 'room1': {}, 'room2': {}, 'room3': {} };
 var users = {};
 
 io.sockets.on('connection', function(socket) {
@@ -19,7 +19,7 @@ io.sockets.on('connection', function(socket) {
 	console.log('New connection from ' + address);
 
 	socket.on('print_users', function() {
-		console.log(users);
+		console.log(rooms[socket.room]);
 	});
 	socket.on('add_user', function(username) {
 		var tmp_username = username;
@@ -41,14 +41,18 @@ io.sockets.on('connection', function(socket) {
 	socket.on('switch_room', function(new_room) {
 		socket.leave(socket.room);
 		leave_message(socket);
+		if (rooms[socket.room]) {
+			delete rooms[socket.room][socket.username];
+		}
 		socket.room = new_room;
 		socket.join(socket.room);
 		join_message(socket);
+		rooms[socket.room][socket.username] = address;
 		socket.emit('update_rooms', rooms, socket.room);
 	});
 
 	socket.on('add_room', function(room_name) {
-		rooms.push(room_name);
+		rooms[room_name] = {};
 	});
 
 	socket.on('update', function() {

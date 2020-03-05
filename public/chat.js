@@ -15,10 +15,10 @@ socket.on('chat_message', function(data) {
 socket.on('update_rooms', function(rooms, current_room) {
 	$('#rooms').empty();
 	$.each(rooms, function(key, value) {
-		if (value == current_room) {
-			$('#rooms').append('<div>' + value + '</div>');
+		if (key == current_room) {
+			$('#rooms').append('<div>' + key + '</div>');
 		} else {
-			$('#rooms').append('<div><a href="#" onclick="switch_room(\'' + value + '\')">' + value + '</a></div>');
+			$('#rooms').append('<div><a href="#" onclick="switch_room(\'' + key + '\')">' + key + '</a></div>');
 		}
 	});
 });
