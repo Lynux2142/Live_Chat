@@ -32,13 +32,9 @@ io.sockets.on('connection', function(socket) {
 	});
 
 	socket.on('chat_message', function(msg) {
-		socket.emit('chat_message', {
-			username: 'You',
-			message: msg
-		});
-		socket.broadcast.emit('chat_message', {
-			username: socket.username,
-			message: msg
+		io.sockets.in(socket.room).emit('chat_message', {
+			message: msg,
+			username: socket.username
 		});
 	});
 
