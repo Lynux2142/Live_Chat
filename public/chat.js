@@ -16,9 +16,9 @@ socket.on('update_rooms', function(rooms, current_room) {
 	$('#rooms').empty();
 	$.each(rooms, function(key, value) {
 		if (key == current_room) {
-			$('#rooms').append('<div>' + key + '</div>');
+			$('#rooms').append('<div>' + key + ' (' + Object.keys(rooms[key]).length + ')</div>');
 		} else {
-			$('#rooms').append('<div><a href="#" onclick="switch_room(\'' + key + '\')">' + key + '</a></div>');
+			$('#rooms').append('<div><a href="#" onclick="switch_room(\'' + key + '\')">' + key + ' (' + Object.keys(rooms[key]).length + ')</a></div>');
 		}
 	});
 });
