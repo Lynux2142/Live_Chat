@@ -32,9 +32,13 @@ io.sockets.on('connection', function(socket) {
 	});
 
 	socket.on('chat_message', function(msg) {
-		io.sockets.in(socket.room).emit('chat_message', {
-			message: msg,
-			username: socket.username
+		socket.emit('chat_message', {
+			username: 'You',
+			message: msg
+		});
+		socket.broadcast.emit('chat_message', {
+			username: socket.username,
+			message: msg
 		});
 	});
 
@@ -61,6 +65,7 @@ io.sockets.on('connection', function(socket) {
 
 	socket.on('disconnect', function() {
 		if (users[socket.username]) {
+			console.log(users[socket.username] + ' has disconnect');
 			if (rooms[socket.room]) {
 				delete rooms[socket.room][socket.username];
 			}
@@ -70,8 +75,9 @@ io.sockets.on('connection', function(socket) {
 				message: socket.username + ' has disconnect'
 			});
 			socket.leave(socket.room);
+		} else {
+			console.log('error disconnect');
 		}
-		console.log('error disconnect');
 	});
 });
 
