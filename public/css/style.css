@@ -1,0 +1,73 @@
+header {
+	position: fixed;
+	width: 100%;
+	z-index: 1;
+	background: skyblue;
+	padding: 1px 0;
+	text-align: center;
+	border-bottom: 1px solid black;
+	color: white;
+	text-shadow: 1px 1px 10px black;
+}
+
+.separator {
+	background-color: black;
+}
+
+.room_list {
+	position: fixed;
+	height: 100%;
+	left: 0;
+	top: 59px;
+	overflow: scroll-y;
+	border-right: 1px solid black;
+	padding: 10px;
+	text-align: center;
+}
+
+.room_list div {
+	margin-top: 5px;
+}
+
+.room_list button {
+	width: 100%;
+	margin-top: 5px;
+}
+
+#messages {
+	top: 59px;
+	padding-top: 15px;
+	padding-bottom: 69px;
+}
+
+#messages p {
+	padding: 0.5rem;
+	margin-bottom: 0;
+}
+
+#messages p:nth-child(odd) {
+	background: #E8F8FF;
+}
+
+form {
+	display: inline-block;
+	background: #888;
+	padding: 5px;
+	position: fixed;
+	bottom: 0;
+	width: 100%;
+}
+
+form input {
+	border: 0;
+	padding: 10px;
+	width: calc(100% - 60px - .5%);
+	margin-right: .5%;
+}
+
+form button {
+	width: 60px;
+	background: rgb(130, 224, 255);
+	border: none;
+	padding: 10px;
+}

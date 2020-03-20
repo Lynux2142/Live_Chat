@@ -4,25 +4,34 @@
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 		<title>Socket.IO chat</title>
-		<link rel="stylesheet" type="text/css" href="style.css">
+		<link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+		<link rel="stylesheet" type="text/css" href="css/style.css">
 	</head>
 	<body>
 		<header>
-			<h1 id="title">BIENVENUE</h1>
+			<div class="container-fluid header">
+				<div class="container">
+					<h1>BIENVENUE</h1>
+				</div>
+			</div>
 		</header>
-		<div id="room_list">
-			<b>ROOMS</b>
-			<div id="rooms"></div>
-			<button id="create_room">create room</button>
-			<button id="update_rooms">update</button>
-			<button id="print_users">users</button>
-		</div>
-		<div id="message_list">
-			<ul id="messages"></ul>
+		<div class="container">
+			<div class="row">
+				<div class="col-xs-12 col-md-1 room_list">
+					<b>ROOMS</b>
+					<hr class="separator"></hr>
+					<div id="rooms"></div>
+					<button class="btn btn-primary" id="create_room">new room</button>
+					<button class="btn btn-primary" id="update_rooms">update</button>
+					<button class="btn btn-primary" id="print_users">users</button>
+				</div>
+				<div class="col-md-11" id="messages"></div>
+			</div>
 		</div>
 		<form action="">
 			<input id="m" autocomplete="off" /><button>Send</button>
 		</form>
+		<script src="js/bootstrap.js"></script>
 		<script src="/socket.io/socket.io.js"></script>
 		<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 		<script src="chat.js"></script>
